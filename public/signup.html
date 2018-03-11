@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Notifyme</title>
+    <!-- jquery -->
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+    <!-- bootstap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" charset="utf-8"></script>
+
+    <!-- custom -->
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/signup.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <nav>
+      <ul class="nav justify-content-end">
+        <li class="nav-item">
+          <a class="nav-link disabled" href="/about.html">About</a>
+        </li>
+      </ul>
+    </nav>
+
+
+
+    <h1 class = "center-text">Sign Up</h1>
+    <form id="loginForm" class="col-sm-6 offset-sm-3">
+        <div class="form-group col-sm-12">
+          <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
+        </div>
+        <div class="form-group col-sm-12">
+          <input type="password" class="form-control" id = "password" placeholder="Password">
+        </div>
+        <div class="form-group col-sm-12">
+          <button id="loginButton" class="btn btn-info float-right">Sign Up</button>
+        </div>
+    </form>
+  </body>
+</html>

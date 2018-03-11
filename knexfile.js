@@ -4,7 +4,7 @@ module.exports = {
 
   development: {
     client: 'pg',
-    connection: 'postgres://localhost/bomapi'
+    connection: 'postgres://localhost/notify'
   },
 
   production: {
