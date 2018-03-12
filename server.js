@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 const queries = require('./queries.js');
 const api = require('./api/api.js');
 const app = express();
@@ -79,8 +80,11 @@ app.use('*', (req,res,next)=>{
 });
 
 app.use('/api', api);
+
+app.use('/static', express.static('./frontend/build/static'));
 app.use('*', (req,res,next)=>{
-  res.send('normal frontend; this will be handled by react router');
+  res.sendFile(path.join(__dirname+'/frontend/build/index.html'));
+  // res.send('normal frontend; this will be handled by react router');
 });
 
 app.listen(port, ()=>{
