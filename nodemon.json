@@ -1,0 +1,7 @@
+{
+  "ignore": ["frontend/build/*"],
+  "events": {
+    "start": "cd frontend; npm run build",
+    "restart": "cd frontend; npm run build"
+  }
+}

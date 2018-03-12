@@ -6,7 +6,7 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar/>
-        <h1>Notify me</h1>
+        <h1 className = "center-text">Notify me</h1>
       </div>
     );
   }
