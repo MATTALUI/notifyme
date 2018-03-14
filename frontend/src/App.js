@@ -11,6 +11,7 @@ class App extends Component {
       user: {}
     };
   }
+
   componentWillMount = ()=>{
     fetch('/api/users/me',{credentials: 'include'})
     .then(resp=>resp.json())
@@ -18,14 +19,15 @@ class App extends Component {
       this.setState({user});
     })
   }
+
   render() {
     return (
       <Router>
         <div>
           <Navbar user={this.state.user}/>
           <Switch>
-            <Route exact path="/" render={ props => <MyPage user={this.state.user}/> } />
-            <Route render={props => <FourOhFour user={this.props.user}/>} />
+            <Route exact path="/" render={props=><MyPage user={this.state.user}/>} />
+            <Route render={props => <FourOhFour user={this.state.user}/>} />
           </Switch>
         </div>
       </Router>

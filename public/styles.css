@@ -6,3 +6,16 @@ body{
 nav{
   background-color: lightgray;
 }
+#navbar-action{
+  cursor: pointer;
+  color: #6c757d;
+}
+.preference-check{
+  margin-bottom: 2.3rem;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
