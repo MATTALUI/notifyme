@@ -13,7 +13,8 @@ exports.seed = function(knex, Promise) {
           email: 'matt@example.com',
           emailPreference: true,
           password: '$2a$10$.6TvIkXXwDcJGk5gksNVLuL9jzdEnIOln06fmcBu6VlTzIBJ.jxV2',
-          admin: true
+          admin: true,
+          acceptedTerms: true
         }
       ]);
     });

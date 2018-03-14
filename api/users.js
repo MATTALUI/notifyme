@@ -6,6 +6,7 @@ const router = express.Router();
 
 
 
+
 router.post('/', (req,res,next)=>{
   console.log(req.body);
   res.send('tudo bom');
@@ -26,7 +27,7 @@ router.get('/me', (req,res,next)=>{
 });
 
 router.post('/login',(req,res,next)=>{
-  queries.getUserFromEmail(req.body.email).then((user)=>{
+  queries.getUserFromEmail(req.body.email.toLowerCase()).then((user)=>{
     if (user === null){
       return res.send({error: 'invalid credentials'});
     }else{
@@ -46,10 +47,34 @@ router.post('/login',(req,res,next)=>{
   });
 });
 
+router.post('/available-email', (req,res,next)=>{
+  queries.checkEmailAvailability(req.body.email).then((available)=>{
+    res.send(available);
+  });
+});
+
 router.delete('/logout',(req,res,next)=>{
   res.clearCookie('user');
   res.send(true);
 });
+
+router.use('*', (req,res,next)=>{
+  if(req.cookies.user){
+    jwt.verify(req.cookies.user, process.env.JWT_SECRET, (err, user)=>{
+      if (user === undefined){
+        res.clearCookie('user');
+        res.redirect('/login.html');
+      }else{
+        req.user = user;
+        next();
+      }
+    });
+  }else{
+    res.redirect('/login.html');
+  }
+});
+
+
 
 // router.use('*',(req,res,next)=>{
 //

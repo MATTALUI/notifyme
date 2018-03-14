@@ -9,6 +9,7 @@ $(document).ready(()=>{
           lastName: $('#lastName').val(),
           email: $('#email').val(),
           password: $('#password').val(),
+          acceptedTerms: true
         }
       })
       .then((response)=>{
@@ -18,15 +19,38 @@ $(document).ready(()=>{
       console.log('its not valid');
     }
   });
+  $('#signupForm').on('change', (event)=>{
+    event.preventDefault();
+    if(valid(false)){
+      $('#signupButton').prop('disabled', false);
+    }else{
+      $('#signupButton').prop('disabled', true);
+    }
+  });
+  $('#email').on('change',(event)=>{
+    let email = $('#email').val();
+    $.ajax('/api/users/available-email',{
+      method: 'POST',
+      data: {email}
+    }).then((available)=>{
+      if(!available){
+        $('#email').addClass('is-invalid');
+      }else{
+        $('#email').addClass('is-valid');
+      }
+    });
+  });
 });
 
-function valid(){
+function valid(applyStyles=true){
   let valid = true;
   //check if passwords match
   if($('#password').val() !== $('#password').val()){
-      console.error('passwords do not match');
-      $('#password').addClass('is-invalid');
-      $('#confirm-password').addClass('is-invalid');
+      if(applyStyles){
+        console.error('passwords do not match');
+        $('#password').addClass('is-invalid');
+        $('#confirm-password').addClass('is-invalid');
+      }
       valid = false;
   }
 
@@ -36,8 +60,10 @@ function valid(){
     let $control = $(control);
     let $input = $($(control).children()[0]);
     if ($input.val().length === 0){
-      console.error($input.attr('id')+' cannot be blank')
-      $input.addClass('is-invalid');
+      if(applyStyles){
+        console.error($input.attr('id')+' cannot be blank');
+        $input.addClass('is-invalid');
+      }
       valid = false;
     }else{
       $input.removeClass('is-invalid');
@@ -46,13 +72,22 @@ function valid(){
 
   //check if email is valid format
   if (!validateEmail()){
-    console.error('invalid email format');
-    $('#email').addClass('is-invalid');
+    if(applyStyles){
+      console.error('invalid email format');
+      $('#email').addClass('is-invalid');
+    }
     valid = false;
   }else{
     $('#email').removeClass('is-invalid');
   }
 
+  if(!$('#termsAcceptance').is(':checked')){
+    if(applyStyles){
+      console.error('You must accept the terms.');
+      $('#terms-conditions').addClass('is-invalid');
+    }
+    valid = false;
+  }
 
 
 

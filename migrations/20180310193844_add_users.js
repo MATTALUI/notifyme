@@ -10,6 +10,8 @@ exports.up = function(knex, Promise) {
     table.boolean('emailPreference').defaultTo(false).notNullable();
     table.string('password').notNullable();
     table.boolean('admin').defaultTo(false).notNullable();
+    table.boolean('acceptedTerms').defaultTo(false).notNullable();
+    table.dateTime('acceptedTermsDate').defaultTo(knex.fn.now());
   });
 };
 

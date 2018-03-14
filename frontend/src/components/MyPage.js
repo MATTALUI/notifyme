@@ -6,18 +6,19 @@ export default class MyPage extends React.Component{
     super(props);
     this.state = {
       user: {
-        firstName: "Cool",
-        lastName: "Cat",
+        firstName: "",
+        lastName: "",
         email: "",
         phoneNumber: null
-      }
+      },
+      loading: true
     }
   }
   componentWillMount = ()=>{
     fetch('/api/users/me', {credentials: 'include'})
     .then(res=>res.json())
     .then((me)=>{
-      this.setState({user: me});
+      this.setState({user: me, loading: false});
     });
   }
 
@@ -59,6 +60,12 @@ export default class MyPage extends React.Component{
 
   render(){
     const user = this.state.user;
+    if (this.state.loading){
+      return (
+        <div>
+        </div>
+      )
+    }
     return (
       <div>
         <h1 className="center-text">{`${user.firstName} ${user.lastName}`}</h1>
@@ -77,7 +84,7 @@ export default class MyPage extends React.Component{
                 <button type="button" className="btn-outline-light form-control disabled" disabled>Connect to Facebook</button>
               </div>
               <div className = "form-group col-sm-12">
-                <Link to="/changepassword">
+                <Link to={`/${user.firstName.toLowerCase()}/password`}>
                   <button type="button" className="btn btn-secondary center-text form-control">Change Password</button>
                 </Link>
               </div>
