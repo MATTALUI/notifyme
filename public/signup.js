@@ -1,19 +1,35 @@
 $(document).ready(()=>{
+
+  $.get('/api/users/me',(response)=>{
+    if(response.email){
+      window.location = '/';
+    }
+  });
+
   $('#signupButton').on('click',(event)=>{
     event.preventDefault();
     if(valid()){
+      let firstName = $('#firstName').val();
+      let lastName = $('#lastName').val();
+      let email = $('#email').val().toLowerCase();
+      firstName = `${firstName[0].toUpperCase()}${firstName.substr(1)}`;
+      lastName = `${lastName[0].toUpperCase()}${lastName.substr(1)}`;
       return $.ajax('/api/users', {
         method: 'POST',
         data: {
-          firstName: $('#firstName').val(),
-          lastName: $('#lastName').val(),
-          email: $('#email').val(),
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
           password: $('#password').val(),
           acceptedTerms: true
         }
       })
       .then((response)=>{
-        console.log(response);
+        if (response.success){
+          window.location = '/';
+        }else{
+          valid();
+        }
       });
     }else{
       console.log('its not valid');

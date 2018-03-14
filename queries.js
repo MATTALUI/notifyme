@@ -18,6 +18,16 @@ module.exports = {
     .where('email', email)
     .first()
     .then(user=>user?user:null);
+  },
+  createNewUser:(userInfo)=>{
+    if(!userInfo.firstName || !userInfo.lastName || !userInfo.password || !userInfo.email){
+      return false;
+    }else{
+      return knex('users')
+      .insert(userInfo)
+      .returning('*')
+      .then(createdUser=>createdUser[0]);
+    }
   }
 
 

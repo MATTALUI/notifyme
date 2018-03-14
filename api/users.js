@@ -8,8 +8,27 @@ const router = express.Router();
 
 
 router.post('/', (req,res,next)=>{
-  console.log(req.body);
-  res.send('tudo bom');
+  if (req.cookies.user){
+    res.clearCookie('user');
+  }
+  unifyNewUser(req.body);
+  bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash(req.body.password, salt, function(err, hash) {
+        req.body.password = hash;
+        queries.createNewUser(req.body).then((createdUser)=>{
+          if(createdUser){
+            delete createdUser.password;
+            let clone = Object.assign({},createdUser);
+            jwt.sign(clone, process.env.JWT_SECRET,(err,token)=>{
+              res.cookie('user', token, {httpOnly: true});
+              res.send({success: 'sucessfully created account'});
+            });
+          }else{
+            res.send({error: 'Account Not Created'});
+          }
+        });
+    });
+  });
 });
 
 router.get('/me', (req,res,next)=>{
@@ -75,10 +94,12 @@ router.use('*', (req,res,next)=>{
 });
 
 
+function unifyNewUser(user){
+  user.firstName = `${user.firstName[0].toUpperCase()}${user.firstName.substr(1)}`;
+  user.lastName = `${user.lastName[0].toUpperCase()}${user.lastName.substr(1)}`;
+  user.email = user.email.toLowerCase();
+}
 
-// router.use('*',(req,res,next)=>{
-//
-//   // res.send('this is the users router');
-// });
+
 
 module.exports = router;
