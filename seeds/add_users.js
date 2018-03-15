@@ -12,8 +12,23 @@ exports.seed = function(knex, Promise) {
           phonePreference: true,
           email: 'matt@example.com',
           emailPreference: true,
+          fbId: '1146475058',
+          fbPreference: true,
           password: '$2a$10$.6TvIkXXwDcJGk5gksNVLuL9jzdEnIOln06fmcBu6VlTzIBJ.jxV2',
           admin: true,
+          acceptedTerms: true
+        },
+        {
+          firstName: 'Bruce',
+          lastName: 'Wayne',
+          phoneNumber: null,
+          phonePreference: false,
+          email: 'bruce@example.com',
+          emailPreference: false,
+          fbId: null,
+          fbPreference: false,
+          password: '$2a$10$.6TvIkXXwDcJGk5gksNVLuL9jzdEnIOln06fmcBu6VlTzIBJ.jxV2',
+          admin: false,
           acceptedTerms: true
         }
       ]);

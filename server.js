@@ -31,6 +31,7 @@ app.use('*', (req,res,next)=>{
         res.clearCookie('user');
         res.redirect('/login.html');
       }else{
+        delete user.iat;
         req.user = user;
         next();
       }

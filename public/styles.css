@@ -3,6 +3,14 @@ body{
 .center-text{
   text-align: center;
 }
+.center-loading{
+  width: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.center-loading > img{
+  width: 100px;
+}
 nav{
   background-color: lightgray;
 }
@@ -18,4 +26,17 @@ input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+.ReactModal__Content {
+  opacity: 0;
+  background-color: pink;
+}
+
+.ReactModal__Content--after-open {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+.ReactModal__Content--before-close {
+  opacity: 0;
 }

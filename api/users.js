@@ -37,6 +37,7 @@ router.get('/me', (req,res,next)=>{
       if(user===undefined){
         res.send(null);
       }else{
+        delete user.iat;
         res.send(user);
       }
     });
@@ -82,15 +83,38 @@ router.use('*', (req,res,next)=>{
     jwt.verify(req.cookies.user, process.env.JWT_SECRET, (err, user)=>{
       if (user === undefined){
         res.clearCookie('user');
-        res.redirect('/login.html');
+        res.sendStatus(401);
       }else{
+        delete user.iat;
         req.user = user;
         next();
       }
     });
   }else{
-    res.redirect('/login.html');
+    res.sendStatus(401);
   }
+});
+
+router.patch('/',(req,res,next)=>{
+  if(req.body.password){
+    res.send('currently unavailable');
+  }else{
+    queries.updateUser(req.user.id, req.body).then((updatedUser)=>{
+      delete updatedUser.password;
+      jwt.sign(Object.assign({},updatedUser), process.env.JWT_SECRET, (err, token)=>{
+        res.cookie('user', token);
+        res.send(updatedUser);
+      });
+    });
+  }
+});
+
+router.post('/password-check', (req,res,next)=>{
+  queries.getHashword(req.user.email).then((hashword)=>{
+    bcrypt.compare(req.body.password,hashword, (err, match)=>{
+      res.send(match);
+    });
+  });
 });
 
 

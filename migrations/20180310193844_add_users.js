@@ -8,6 +8,8 @@ exports.up = function(knex, Promise) {
     table.boolean('phonePreference').defaultTo(false).notNullable();
     table.string('email').unique().notNullable();
     table.boolean('emailPreference').defaultTo(false).notNullable();
+    table.string('fbId').defaultTo(null);
+    table.boolean('fbPreference').defaultTo(false);
     table.string('password').notNullable();
     table.boolean('admin').defaultTo(false).notNullable();
     table.boolean('acceptedTerms').defaultTo(false).notNullable();

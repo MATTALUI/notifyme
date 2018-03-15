@@ -13,6 +13,12 @@ module.exports = {
     .first()
     .then(relevantObject => relevantObject ? relevantObject.password : null);
   },
+  getUserById: (id)=>{
+    return knex('users')
+    .where('id', id)
+    .first()
+    .then(user=>user);
+  },
   getUserFromEmail: (email)=>{
     return knex('users')
     .where('email', email)
@@ -28,6 +34,14 @@ module.exports = {
       .returning('*')
       .then(createdUser=>createdUser[0]);
     }
+  },
+  updateUser: (id,changes)=>{
+    return knex('users')
+    .where('id', id)
+    .update(changes)
+    .returning('*')
+    // .first()
+    .then(updatedUser=>updatedUser[0]);
   }
 
 

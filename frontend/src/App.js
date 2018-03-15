@@ -20,13 +20,17 @@ class App extends Component {
     })
   }
 
+  updateUser = (user)=>{
+    this.setState({user: user});
+  }
+
   render() {
     return (
       <Router>
         <div>
           <Navbar user={this.state.user}/>
           <Switch>
-            <Route exact path="/" render={props=><MyPage user={this.state.user}/>} />
+            <Route exact path="/" render={props=><MyPage user={this.state.user} updateUser={this.updateUser}/>} />
             <Route render={props => <FourOhFour user={this.state.user}/>} />
           </Switch>
         </div>
