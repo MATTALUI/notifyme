@@ -1,5 +1,6 @@
 const knex = require('./knex.js');
 module.exports = {
+  //user queries
   checkEmailAvailability: (email)=>{
     return knex('users')
     .where('email', email)
@@ -40,8 +41,36 @@ module.exports = {
     .where('id', id)
     .update(changes)
     .returning('*')
-    // .first()
     .then(updatedUser=>updatedUser[0]);
+  },
+
+
+  //organizations queries
+  getOrganizations: (userId)=>{
+    return knex('organizations')
+    .select('*')
+    .then((orgs)=>{
+      if (userId === undefined){
+        return orgs;
+      }else{
+        let promises = [];
+        orgs.forEach((org)=>{
+          promises.push(module.exports.checkMembership(org.id, userId));
+        });
+        return Promise.all(promises).then((memberships)=>{
+          return orgs.map((org, index)=>{
+            org.member = memberships[index];
+            return org;
+          });
+        });
+      }
+    });
+  },
+  checkMembership: (orgId, userId)=>{
+    return knex('users_organizations')
+    .where('organizationId', orgId)
+    .where('userId', userId)
+    .then(membership=>membership.length > 0 ? true : false);
   }
 
 

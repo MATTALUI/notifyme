@@ -6,6 +6,7 @@ exports.seed = function(knex, Promise) {
       // Inserts seed entries
       return knex('users').insert([
         {
+          id: 1,
           firstName: 'Matthew',
           lastName: 'Hummer',
           phoneNumber: '9708882794',
@@ -19,6 +20,7 @@ exports.seed = function(knex, Promise) {
           acceptedTerms: true
         },
         {
+          id: 2,
           firstName: 'Bruce',
           lastName: 'Wayne',
           phoneNumber: null,
