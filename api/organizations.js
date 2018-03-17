@@ -8,6 +8,12 @@ router.get('/',(req,res,next)=>{
   });
 });
 
+router.get('/my-memberships', (req,res,next)=>{
+  queries.getMyOrganizations(req.user.id).then((myOrgs)=>{
+    res.send(myOrgs);
+  });
+});
+
 router.post('/check-membership',(req,res,next)=>{
   queries.checkMembership(req.body.organizationId, req.user.id).then((member)=>{
     res.send(member);

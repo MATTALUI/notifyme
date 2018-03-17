@@ -66,6 +66,16 @@ module.exports = {
       }
     });
   },
+  getMyOrganizations: (userId)=>{
+    return knex('users_organizations')
+    .where('users_organizations.userId', userId)
+    .join('organizations', 'organizations.id', 'users_organizations.organizationId')
+    .select('organizations.*')
+    .then((orgs)=>{
+      orgs.forEach((org)=>{org.member=true;});
+      return orgs;
+    });
+  },
   checkMembership: (orgId, userId)=>{
     return knex('users_organizations')
     .where('organizationId', orgId)

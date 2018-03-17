@@ -33,6 +33,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" render={props=><MyPage user={this.state.user} updateUser={this.updateUser}/>} />
             <Route exact path="/organizations" render={props=><OrganizationsPage user={this.state.user}/>} />
+            <Route exact path="/:name/organizations" render={props=><OrganizationsPage user={this.state.user} myOrganizations={true}/>} />
             <Route render={props => <FourOhFour user={this.state.user}/>} />
           </Switch>
         </div>
