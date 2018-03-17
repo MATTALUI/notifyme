@@ -13,6 +13,11 @@ router.get('/my-memberships', (req,res,next)=>{
     res.send(myOrgs);
   });
 });
+router.get('/:id',(req,res,next)=>{
+  queries.getOrganizationById(req.params.id, req.user.id).then((org)=>{
+    res.send(org);
+  });
+});
 
 router.post('/:orgId/join', (req,res,next)=>{
   queries.joinOrganization(req.params.orgId, req.user.id).then((joined)=>{
