@@ -14,6 +14,17 @@ router.get('/my-memberships', (req,res,next)=>{
   });
 });
 
+router.post('/:orgId/join', (req,res,next)=>{
+  queries.joinOrganization(req.params.orgId, req.user.id).then((joined)=>{
+    res.send(joined);
+  });
+});
+router.delete('/:orgId/join', (req,res,next)=>{
+  queries.leaveOrganization(req.params.orgId, req.user.id).then((left)=>{
+    res.send(left);
+  });
+});
+
 router.post('/check-membership',(req,res,next)=>{
   queries.checkMembership(req.body.organizationId, req.user.id).then((member)=>{
     res.send(member);

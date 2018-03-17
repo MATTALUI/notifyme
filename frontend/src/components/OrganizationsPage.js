@@ -23,7 +23,7 @@ export default class OrganizationsPage extends React.Component{
 
   fetchOrganizations = ()=>{
     let url = this.props.myOrganizations  ? '/api/organizations/my-memberships' : '/api/organizations';
-    fetch(url,{credentials: 'include'})
+    return fetch(url,{credentials: 'include'})
     .then(resp=>resp.json())
     .then((orgs)=>{
       let pub = [];
@@ -40,6 +40,33 @@ export default class OrganizationsPage extends React.Component{
       this.setState({pub, priv});
     });
   }
+
+  updateOrganization = (update) =>{
+    if(!update.id){
+      console.error('updating an organization requires an id');
+      return;
+    }
+    let orgId = update.id;
+    let updated = 'public';
+    let copy = this.state.pub.slice();
+    let org = copy.find(org => org.id === orgId);
+    if(org === undefined){
+      updated = 'private'
+      copy = this.state.priv.slice();
+      org = copy.find(org => org.id === orgId)
+    }
+    console.log(updated, org);
+    for(let key in update){
+      org[key] = update[key];
+    }
+    if(updated==='public'){
+      this.setState({pub: copy});
+    }else{
+      this.setState({priv: copy});
+    }
+
+  }
+
   render(){
     return (
       <div>
@@ -55,7 +82,7 @@ export default class OrganizationsPage extends React.Component{
                 </thead>
               )}
               <tbody>
-                {this.state.pub.map((org, index)=>(<Organization key={index} {...org}/>))}
+                {this.state.pub.map((org, index)=>(<Organization key={index} {...org} updateOrganization={this.updateOrganization}/>))}
               </tbody>
               {this.state.priv.length > 0 && (
                 <thead className="thead-light">
@@ -65,7 +92,7 @@ export default class OrganizationsPage extends React.Component{
                 </thead>
               )}
               <tbody>
-                {this.state.priv.map((org, index)=>(<Organization key={index} {...org}/>))}
+                {this.state.priv.map((org, index)=>(<Organization key={index} {...org} updateOrganization={this.updateOrganization}/>))}
               </tbody>
             </table>
           </div>

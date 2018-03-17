@@ -3,18 +3,35 @@ import { Link } from 'react-router-dom';
 
 export default class Organization extends React.Component{
   leaveOrganization = ()=>{
-    let id = this.props.id;
-    console.log('leave Organization', id);
+    let orgId = this.props.id;
+    this.joinOrLeaveOrganization('leave',orgId);
   };
 
   joinOrganization = ()=>{
-    let id = this.props.id;
-    console.log('join organization', id);
+    let orgId = this.props.id;
+    this.joinOrLeaveOrganization('join',orgId);
   };
 
   sendJoinRequest = ()=>{
     let id = this.props.id;
     console.log('send a join request', id);
+  };
+
+  joinOrLeaveOrganization = (joinOrLeave, orgId)=>{
+    if (joinOrLeave === 'join' || joinOrLeave === 'leave'){
+      let method = joinOrLeave === 'join' ? 'POST': 'DELETE';
+      return fetch(`/api/organizations/${orgId}/join`,{
+        method,
+        credentials: 'include',
+      })
+      .then(resp=>resp.json())
+      .then((success)=>{
+        let member = joinOrLeave === 'join' ? success : !success;
+        this.props.updateOrganization({member, id: orgId});
+      });
+    }else{
+      console.log('invalid input');
+    }
   };
 
   render(){

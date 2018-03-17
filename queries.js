@@ -81,7 +81,21 @@ module.exports = {
     .where('organizationId', orgId)
     .where('userId', userId)
     .then(membership=>membership.length > 0 ? true : false);
-  }
+  },
+  joinOrganization: (organizationId, userId)=>{
+    return knex('users_organizations')
+    .insert({organizationId, userId})
+    .returning('*')
+    .then(joined=>joined?true:false);
+  },
+  leaveOrganization: (orgId, userId)=>{
+    return knex('users_organizations')
+    .del()
+    .where('organizationId', orgId)
+    .where('userId', userId)
+    .returning('*')
+    .then(deleted=>deleted.length?true:false)
+  },
 
 
 
