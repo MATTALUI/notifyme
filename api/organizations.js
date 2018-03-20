@@ -13,18 +13,36 @@ router.get('/my-memberships', (req,res,next)=>{
     res.send(myOrgs);
   });
 });
-router.get('/:id',(req,res,next)=>{
-  queries.getOrganizationById(req.params.id, req.user.id).then((org)=>{
+router.get('/:orgId',(req,res,next)=>{
+  queries.getOrganizationById(req.params.orgId, req.user.id).then((org)=>{
     res.send(org);
   });
 });
 
-router.post('/:orgId/join', (req,res,next)=>{
+router.get('/:orgId/admins',(req,res,next)=>{
+  queries.getAdmins(req.params.orgId).then((admins)=>{
+    res.send(admins);
+  });
+});
+
+router.get('/:orgId/members', (req,res,next)=>{
+  queries.getMembers(req.params.orgId).then((members)=>{
+    res.send(members);
+  });
+});
+
+router.get('/:orgId/messages', (req,res,next)=>{
+  queries.getOrganizationsMessages(req.params.orgId).then((messages)=>{
+    res.send(messages);
+  });
+});
+
+router.post('/:orgId/members', (req,res,next)=>{
   queries.joinOrganization(req.params.orgId, req.user.id).then((joined)=>{
     res.send(joined);
   });
 });
-router.delete('/:orgId/join', (req,res,next)=>{
+router.delete('/:orgId/members', (req,res,next)=>{
   queries.leaveOrganization(req.params.orgId, req.user.id).then((left)=>{
     res.send(left);
   });

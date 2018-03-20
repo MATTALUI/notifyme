@@ -20,7 +20,7 @@ export default class Organization extends React.Component{
   joinOrLeaveOrganization = (joinOrLeave, orgId)=>{
     if (joinOrLeave === 'join' || joinOrLeave === 'leave'){
       let method = joinOrLeave === 'join' ? 'POST': 'DELETE';
-      return fetch(`/api/organizations/${orgId}/join`,{
+      return fetch(`/api/organizations/${orgId}/members`,{
         method,
         credentials: 'include',
       })
@@ -40,9 +40,10 @@ export default class Organization extends React.Component{
     const description = this.props.description;
     const publicOrg = this.props.public;
     const member = this.props.member;
+    const admin = this.props.admin;
     return (
-      <tr>
-        <td>{title}</td>
+      <tr className={admin ? "table-warning" : null}>
+        <td >{title}</td>
         <td>{description}</td>
         <td>
           {member?(

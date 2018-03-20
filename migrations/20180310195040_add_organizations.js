@@ -6,6 +6,7 @@ exports.up = function(knex, Promise) {
     table.text('description').defaultTo(null);
     table.boolean('public').defaultTo(true);
     table.boolean('visible').defaultTo(true);
+    table.timestamps(false,true);
   });
 };
 

@@ -40,3 +40,6 @@ input::-webkit-inner-spin-button {
 .ReactModal__Content--before-close {
   opacity: 0;
 }
+.clickable{
+  cursor: pointer;
+}

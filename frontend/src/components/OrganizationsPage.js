@@ -55,7 +55,6 @@ export default class OrganizationsPage extends React.Component{
       copy = this.state.priv.slice();
       org = copy.find(org => org.id === orgId)
     }
-    console.log(updated, org);
     for(let key in update){
       org[key] = update[key];
     }

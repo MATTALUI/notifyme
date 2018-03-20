@@ -21,5 +21,8 @@ exports.seed = function(knex, Promise) {
           organizationId: 4
         }
       ]);
+    })
+    .then(function(){
+      return knex.raw("SELECT setval('users_organizations_id_seq', (SELECT MAX(id) FROM users_organizations));");
     });
 };

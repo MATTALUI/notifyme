@@ -58,9 +58,16 @@ module.exports = {
           promises.push(module.exports.checkMembership(org.id, userId));
         });
         return Promise.all(promises).then((memberships)=>{
-          return orgs.map((org, index)=>{
-            org.member = memberships[index];
-            return org;
+          orgs.forEach((org, index)=>{ org.member = memberships[index]; });
+          promises = [];
+          orgs.forEach((org)=>{
+            promises.push(module.exports.checkIfAdmin(org.id, userId));
+          });
+          return Promise.all(promises).then((adminships)=>{
+            return orgs.map((org,index)=>{
+              org.admin = adminships[index];
+              return org;
+            });
           });
         });
       }
@@ -72,8 +79,17 @@ module.exports = {
     .join('organizations', 'organizations.id', 'users_organizations.organizationId')
     .select('organizations.*')
     .then((orgs)=>{
-      orgs.forEach((org)=>{org.member=true;});
-      return orgs;
+      let promises = [];
+      orgs.forEach((org)=>{
+        org.member=true;
+        promises.push(module.exports.checkIfAdmin(org.id, userId));
+      });
+      return Promise.all(promises).then((adminships)=>{
+        return orgs.map((org,index)=>{
+          org.admin = adminships[index];
+          return org;
+        });
+      });
     });
   },
   getOrganizationById: (orgId, userId=null)=>{
@@ -84,18 +100,74 @@ module.exports = {
       if(userId){
         return module.exports.checkMembership(org.id, userId).then((member)=>{
           org.member = member;
-          return org;
+          return module.exports.checkIfAdmin(org.id, userId).then((admin)=>{
+            org.admin = admin;
+            return org;
+          });
         });
       }else{
         return org;
       }
     });
   },
+  getOrganizationsMessages: (orgId)=>{
+    return knex('messages')
+    .where('organizationId', orgId)
+    .orderBy('created_at', 'desc')
+    .then((messages)=>{
+      let promises = [];
+      messages.forEach((message)=>{
+        promises.push(module.exports.getUserById(message.adminId));
+      });
+      return Promise.all(promises).then((admins)=>{
+        messages.forEach((message, index)=>{
+          let currentAdmin = admins[index];
+          message.admin = {
+            id: currentAdmin.id,
+            firstName: currentAdmin.firstName,
+            lastName: currentAdmin.lastName
+          };
+          delete message.adminId;
+        });
+        return messages;
+      });
+    });
+  },
   checkMembership: (orgId, userId)=>{
     return knex('users_organizations')
     .where('organizationId', orgId)
     .where('userId', userId)
-    .then(membership=>membership.length > 0 ? true : false);
+    .then(membership => (membership.length > 0));
+  },
+  checkIfAdmin: (orgId, userId)=>{
+    return knex('admins_organizations')
+    .where('organizationId', orgId)
+    .where('adminId', userId)
+    .then(adminship => (adminship.length > 0));
+  },
+  getMembers: (orgId)=>{
+    return knex('users_organizations')
+    .where('organizationId', orgId)
+    .join('users', 'users_organizations.userId', 'users.id')
+    .select('users.*')
+    .then((members)=>{
+      members.forEach((member)=>{
+        delete member.password;
+      });
+      return members;
+    });
+  },
+  getAdmins: (orgId)=>{
+    return knex('admins_organizations')
+    .where('organizationId', orgId)
+    .join('users', 'admins_organizations.adminId', 'users.id')
+    .select('users.*')
+    .then((members)=>{
+      members.forEach((member)=>{
+        delete member.password;
+      });
+      return members;
+    });
   },
   joinOrganization: (organizationId, userId)=>{
     return knex('users_organizations')

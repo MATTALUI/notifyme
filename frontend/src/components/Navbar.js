@@ -4,11 +4,8 @@ import { Link } from 'react-router-dom';
 export default class Navbar extends React.Component{
   logout=(event)=>{
     event.preventDefault();
-    fetch('/api/users/logout',{credentials: 'include', method: 'DELETE'})
+    fetch('/api/users/logout', {credentials: 'include', method: 'DELETE'})
     .then(()=>{ window.location = "/"; })
-  }
-  componentDidMount(){
-
   }
 
   render(){
@@ -17,8 +14,8 @@ export default class Navbar extends React.Component{
       <nav>
         <ul className="nav justify-content-end">
 
-          <form className="form-inline">
-            <input className="form-control mr-sm-2" type="search" placeholder="Search Organizations"/>
+          <form className="form-inline" action="/organizations">
+            <input className="form-control mr-sm-2" url="/organizations" type="search" name="search" placeholder="Search Organizations"/>
           </form>
 
           <li className="nav-item">

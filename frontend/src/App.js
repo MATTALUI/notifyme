@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Navbar from './components/Navbar.js';
 import MyPage from './components/MyPage.js';
 import OrganizationsPage from './components/OrganizationsPage.js';
+import OrganizationPage from './components/OrganizationPage.js';
 import FourOhFour from './components/FourOhFour.js';
 
 class App extends Component {
@@ -31,10 +32,11 @@ class App extends Component {
         <div>
           <Navbar user={this.state.user}/>
           <Switch>
-            <Route exact path="/" render={props=><MyPage user={this.state.user} updateUser={this.updateUser}/>} />
-            <Route exact path="/organizations" render={props=><OrganizationsPage user={this.state.user}/>} />
-            <Route exact path="/:name/organizations" render={props=><OrganizationsPage user={this.state.user} myOrganizations={true}/>} />
-            <Route render={props => <FourOhFour user={this.state.user}/>} />
+            <Route exact path="/" render={props=><MyPage user={this.state.user} updateUser={this.updateUser} {...props}/>} />
+            <Route exact path="/organizations" render={props=><OrganizationsPage user={this.state.user} {...props}/>} />
+            <Route exact path="/organizations/:orgId" render={props=><OrganizationPage user={this.state.user} {...props}/>} />
+            <Route exact path="/:name/organizations" render={props=><OrganizationsPage user={this.state.user} myOrganizations={true} {...props}/>} />
+            <Route render={props => <FourOhFour user={this.state.user} {...props}/>} />
           </Switch>
         </div>
       </Router>

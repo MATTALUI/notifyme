@@ -14,6 +14,7 @@ exports.up = function(knex, Promise) {
     table.boolean('admin').defaultTo(false).notNullable();
     table.boolean('acceptedTerms').defaultTo(false).notNullable();
     table.dateTime('acceptedTermsDate').defaultTo(knex.fn.now());
+    table.timestamps(false,true);
   });
 };
 

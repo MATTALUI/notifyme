@@ -38,5 +38,8 @@ exports.seed = function(knex, Promise) {
           visible: false
         }
       ]);
+    })
+    .then(function(){
+      return knex.raw("SELECT setval('organizations_id_seq', (SELECT MAX(id) FROM organizations));");
     });
 };
