@@ -44,6 +44,12 @@ export default class OrganizationPage extends React.Component{
     });
   }
 
+  handleNewMessage=(newMessage)=>{
+    let messages = this.state.messages.slice()
+    messages.unshift(newMessage);
+    this.setState({messages})
+  }
+
 
   render(){
     return(
@@ -68,7 +74,7 @@ export default class OrganizationPage extends React.Component{
                 <br/>
 
                 {this.state.admin && (
-                  <NewMessageForm organizationId={this.state.id} organizationTitle={this.state.title}/>
+                  <NewMessageForm organizationId={this.state.id} organizationTitle={this.state.title} handleNewMessage={this.handleNewMessage}/>
                 )}
 
                 <div className="card-body">

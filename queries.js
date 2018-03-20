@@ -181,7 +181,16 @@ module.exports = {
     .where('organizationId', orgId)
     .where('userId', userId)
     .returning('*')
-    .then(deleted=>deleted.length?true:false)
+    .then(deleted=>deleted.length?true:false);
+  },
+
+
+  //messages queries
+  saveMessage: (message)=>{
+    return knex('messages')
+    .insert(message)
+    .returning('*')
+    .then(savedMessage=>savedMessage[0]);
   },
 
 
