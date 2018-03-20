@@ -11,7 +11,7 @@ export default class NewMessageForm extends React.Component{
   updateBody = ()=>{
     this.setState({body: this.refs.messageBody.value});
   }
-  
+
   toggleAnonymous = ()=>{
     this.setState({anonymous: !this.state.anonymous});
   }
@@ -19,8 +19,23 @@ export default class NewMessageForm extends React.Component{
   sendNewMessage = (event)=>{
     event.preventDefault();
     let body = Object.assign({},this.state);
-    body.id = this.props.organizationId;
-    console.log(body);
+    body.organizationId = this.props.organizationId;
+    return fetch(`/api/organizations/${this.props.organizationId}/messages`,{
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    .then(resp=>resp.json())
+    .then((sentMesssage)=>{
+      this.setState({body: '', anonymous: false},()=>{
+        if(this.props.handleNewMessage){
+          this.props.handleNewMessage(sentMesssage);
+        }
+      });
+    });
   }
 
   render(){
