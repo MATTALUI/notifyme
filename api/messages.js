@@ -20,6 +20,7 @@ router.post('/test',(req,res,next)=>{
   });
 });
 
+
 router.post('/',(req,res,next)=>{
   req.body.adminId = req.user.id;
   queries.saveMessage(req.body).then((savedMessage)=>{
@@ -34,7 +35,7 @@ router.post('/',(req,res,next)=>{
   });
 });
 
-module.exports = router;
+
 
 
 function prepareToSendMessages(message, mailer){
@@ -58,8 +59,8 @@ function prepareToSendMessages(message, mailer){
     });
   });
 }
+
 function sendEmail(user, message, mailer){
-  console.log(`sending ${user.firstName} an email from ${message.organization.title} (${message.admin.firstName})`);
   mailer.send('message',{
     to: user.email,
     subject: `${message.organization.title} message`,
@@ -71,9 +72,19 @@ function sendEmail(user, message, mailer){
     }
   });
 }
+
 function sendText(user, message){
     console.log(`sending ${user.firstName} a text from ${message.organization.title} (${message.admin.firstName})`);
 }
+
 function postToFacebook(user, message){
     console.log(`posting to ${user.firstName}'s facebook from ${message.organization.title} (${message.admin.firstName})`);
 }
+
+
+
+
+
+
+
+module.exports = router;
