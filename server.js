@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const mailer = require('express-mailer');
+const cons = require('consolidate');
 const path = require('path');
 const api = require('./api/api.js');
 const jwt = require('jsonwebtoken');
@@ -9,6 +11,21 @@ const app = express();
 const port = process.env.PORT || 8000;
 if (process.env.NODE_ENV !== 'production') { require('dotenv').config(); }
 
+mailer.extend(app, {
+  from: process.env.MAIL_USERNAME,
+  host: 'smtp.gmail.com',
+  secureConnection: true,
+  port: 465,
+  transportMethod: 'SMTP',
+  auth: {
+    user: process.env.MAIL_USERNAME,
+    pass: process.env.MAIL_PASSWORD
+  }
+});
+
+app.engine('.haml', cons.haml);
+app.set('views', __dirname + '/mailViews');
+app.set('view engine', 'haml');
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -17,7 +34,6 @@ app.use(cookieParser());
 
 
 app.use(express.static('public'));
-
 
 
 app.use('/api/users', usersRoute);
