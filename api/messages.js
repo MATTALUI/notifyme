@@ -81,8 +81,7 @@ function sendText(user, message){
     from: process.env.TWILIO_NUMBER,
     body: message.body
   };
-  client.messages.create(options).then((msg)=>{
-  });
+  client.messages.create(options).then((msg)=>{});
 }
 
 function postToFacebook(user, message){

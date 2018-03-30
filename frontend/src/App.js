@@ -4,6 +4,7 @@ import Navbar from './components/Navbar.js';
 import MyPage from './components/MyPage.js';
 import OrganizationsPage from './components/OrganizationsPage.js';
 import OrganizationPage from './components/OrganizationPage.js';
+import PasswordChanger from './components/PasswordChanger.js';
 import FourOhFour from './components/FourOhFour.js';
 
 class App extends Component {
@@ -36,6 +37,7 @@ class App extends Component {
             <Route exact path="/organizations" render={props=><OrganizationsPage user={this.state.user} {...props}/>} />
             <Route exact path="/organizations/:orgId" render={props=><OrganizationPage user={this.state.user} {...props}/>} />
             <Route exact path="/:name/organizations" render={props=><OrganizationsPage user={this.state.user} myOrganizations={true} {...props}/>} />
+            <Route exact path="/:name/password" render={props=><PasswordChanger user={this.state.user} {...props}/>} />
             <Route render={props => <FourOhFour user={this.state.user} {...props}/>} />
           </Switch>
         </div>

@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const queries = require('../queries.js');
@@ -97,7 +97,30 @@ router.use('*', (req,res,next)=>{
 
 router.patch('/',(req,res,next)=>{
   if(req.body.password){
-    res.send('currently unavailable');
+    queries.getHashword(req.user.email).then((hashword)=>{
+      bcrypt.compare(req.body.password, hashword, (err, match)=>{
+        if (match){
+          bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(req.body.newPassword, salt, function(err, hash) {
+              if(err){
+                res.send({error: err});
+                return;
+              }
+              queries.updateUser(req.user.id, {password: hash}).then((updatedUser)=>{
+                delete updatedUser.password;
+                jwt.sign(Object.assign({},updatedUser), process.env.JWT_SECRET, (err, token)=>{
+                  res.cookie('user', token);
+                  res.send(updatedUser);
+                });
+              });
+            });
+          });
+        }else{
+          res.send({error: 'incorrect password'});
+        }
+      });
+    });
+    return;
   }else{
     queries.updateUser(req.user.id, req.body).then((updatedUser)=>{
       delete updatedUser.password;
