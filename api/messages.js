@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../queries.js');
+const twilio = require('twilio');
+const client = new twilio(process.env.TWILIO_ACCOUNT, process.env.TWILIO_AUTH);
 
 
 router.post('/test',(req,res,next)=>{
@@ -74,11 +76,17 @@ function sendEmail(user, message, mailer){
 }
 
 function sendText(user, message){
-    console.log(`sending ${user.firstName} a text from ${message.organization.title} (${message.admin.firstName})`);
+  let options = {
+    to: `+${user.phoneNumber}`,
+    from: process.env.TWILIO_NUMBER,
+    body: message.body
+  };
+  client.messages.create(options).then((msg)=>{
+  });
 }
 
 function postToFacebook(user, message){
-    console.log(`posting to ${user.firstName}'s facebook from ${message.organization.title} (${message.admin.firstName})`);
+  console.log(`posting to ${user.firstName}'s facebook from ${message.organization.title} (${message.admin.firstName})`);
 }
 
 

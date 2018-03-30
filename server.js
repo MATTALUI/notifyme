@@ -1,3 +1,4 @@
+if (process.env.NODE_ENV !== 'production') { require('dotenv').config(); }
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -9,7 +10,7 @@ const jwt = require('jsonwebtoken');
 const usersRoute = require('./api/users.js');
 const app = express();
 const port = process.env.PORT || 8000;
-if (process.env.NODE_ENV !== 'production') { require('dotenv').config(); }
+
 
 mailer.extend(app, {
   from: process.env.MAIL_USERNAME,
