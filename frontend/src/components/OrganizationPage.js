@@ -56,6 +56,13 @@ export default class OrganizationPage extends React.Component{
       <div>
         <h1 className="center-text">{this.state.title}</h1>
         <p className="center-text">{this.state.description}</p>
+        {this.state.admin && (
+          <div className="row">
+            <input type="text" className="col-sm-4 offset-sm-3 form-control center-text" placeholder="email"/>
+            <button className="btn btn-info col-sm-2">Add Admin</button>
+          </div>
+        )}
+        <br/>
         <div className="row">
           <MemberCollapse title="Admins" data={this.state.admins}/>
           <MemberCollapse title="Members" data={this.state.members}/>

@@ -27,7 +27,7 @@ export default class Organization extends React.Component{
       .then(resp=>resp.json())
       .then((success)=>{
         let member = joinOrLeave === 'join' ? success : !success;
-        this.props.updateOrganization({member, id: orgId});
+        this.props.updateOrganization({member, id: orgId, admin: false});
       });
     }else{
       console.log('invalid input');

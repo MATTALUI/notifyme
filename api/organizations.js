@@ -43,7 +43,15 @@ router.post('/:orgId/members', (req,res,next)=>{
   });
 });
 router.delete('/:orgId/members', (req,res,next)=>{
-  queries.leaveOrganization(req.params.orgId, req.user.id).then((left)=>{
+  let userId = req.user.id;
+  queries.leaveOrganization(req.params.orgId, userId).then((left)=>{
+    queries.removeAdmin(req.params.orgId, userId).then(()=>{
+      queries.countOrganizationsAdmining(userId).then((count)=>{
+        if (count === 0){
+          queries.updateUser(userId, {admin: false});  
+        }
+      });
+    });
     res.send(left);
   });
 });

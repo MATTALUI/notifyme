@@ -36,14 +36,13 @@ module.exports = {
       .then(createdUser=>createdUser[0]);
     }
   },
-  updateUser: (id,changes)=>{
+  updateUser: (userId,changes)=>{
     return knex('users')
-    .where('id', id)
+    .where('id', userId)
     .update(changes)
     .returning('*')
     .then(updatedUser=>updatedUser[0]);
   },
-
 
   //organizations queries
   getOrganizations: (userId)=>{
@@ -61,7 +60,7 @@ module.exports = {
           orgs.forEach((org, index)=>{ org.member = memberships[index]; });
           promises = [];
           orgs.forEach((org)=>{
-            promises.push(module.exports.checkIfAdmin(org.id, userId));
+            promises.push(module.exports.checkIfOrganizationAdmin(org.id, userId));
           });
           return Promise.all(promises).then((adminships)=>{
             return orgs.map((org,index)=>{
@@ -82,7 +81,7 @@ module.exports = {
       let promises = [];
       orgs.forEach((org)=>{
         org.member=true;
-        promises.push(module.exports.checkIfAdmin(org.id, userId));
+        promises.push(module.exports.checkIfOrganizationAdmin(org.id, userId));
       });
       return Promise.all(promises).then((adminships)=>{
         return orgs.map((org,index)=>{
@@ -100,7 +99,7 @@ module.exports = {
       if(userId){
         return module.exports.checkMembership(org.id, userId).then((member)=>{
           org.member = member;
-          return module.exports.checkIfAdmin(org.id, userId).then((admin)=>{
+          return module.exports.checkIfOrganizationAdmin(org.id, userId).then((admin)=>{
             org.admin = admin;
             return org;
           });
@@ -139,7 +138,7 @@ module.exports = {
     .where('userId', userId)
     .then(membership => (membership.length > 0));
   },
-  checkIfAdmin: (orgId, userId)=>{
+  checkIfOrganizationAdmin: (orgId, userId)=>{
     return knex('admins_organizations')
     .where('organizationId', orgId)
     .where('adminId', userId)
@@ -184,6 +183,59 @@ module.exports = {
     .then(deleted=>deleted.length?true:false);
   },
 
+  //admin queries
+  toggleAdmin: (userId)=>{
+    return module.exports.checkIfAdmin(userId)
+    .then((admin)=>{
+      return knex('users')
+      .update('admin', !admin)
+      .returning('*')
+      .then(updatedUser=>updatedUser[0]);
+    });
+  },
+  checkIfAdmin: (userId)=>{
+    return knex('users')
+    .where('id', userId)
+    .first()
+    .then(user => user.admin );
+  },
+  countOrganizationsAdmining: (userId)=>{
+    return knex('admins_organizations')
+    .where('adminId', userId)
+    .then(organizations=>organizations.length);
+  },
+  addAdminById: (orgId, userId)=>{
+    return knex('admins_organizations')
+    .insert({
+      adminId: userId,
+      organizationId: orgId
+    })
+    .returning('*')
+    .then(created=>created);
+  },
+  addAdminByEmail: (orgId, email)=>{
+    return module.exports.getUserFromEmail(email).then((user)=>{
+      if(!user){
+        return false;
+      }else{
+        return knex('admins_organizations')
+        .insert({
+          adminId: user.id,
+          organizationId: orgId
+        })
+        .returning('*')
+        .then(added=>added ? true : false);
+      }
+    });
+  },
+  removeAdmin: (orgId, userId)=>{
+    return knex('admins_organizations')
+    .del()
+    .where('organizationId', orgId)
+    .where('adminId', userId)
+    .returning('*')
+    .then(deleted=>deleted);
+  },
 
   //messages queries
   saveMessage: (message)=>{
@@ -192,8 +244,4 @@ module.exports = {
     .returning('*')
     .then(savedMessage=>savedMessage[0]);
   },
-
-
-
-
 };
