@@ -37,18 +37,29 @@ router.get('/:orgId/messages', (req,res,next)=>{
   });
 });
 
+router.post('/:orgId/admins', (req,res,next)=>{
+  queries.addAdminByEmail(req.params.orgId, req.body.email).then((added)=>{
+    if (!added){
+      res.send({error: `Could not find user with email "${req.body.email}"`});
+    }else{
+      res.send(added);
+    }
+  });
+});
+
 router.post('/:orgId/members', (req,res,next)=>{
   queries.joinOrganization(req.params.orgId, req.user.id).then((joined)=>{
     res.send(joined);
   });
 });
+
 router.delete('/:orgId/members', (req,res,next)=>{
   let userId = req.user.id;
   queries.leaveOrganization(req.params.orgId, userId).then((left)=>{
     queries.removeAdmin(req.params.orgId, userId).then(()=>{
       queries.countOrganizationsAdmining(userId).then((count)=>{
         if (count === 0){
-          queries.updateUser(userId, {admin: false});  
+          queries.updateUser(userId, {admin: false});
         }
       });
     });

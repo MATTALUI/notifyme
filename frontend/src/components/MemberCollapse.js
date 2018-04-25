@@ -1,7 +1,7 @@
 import React from 'react';
 export default class MemberCollapse extends React.Component{
   render(){
-    const collapseId = `${this.props.title}-collapse`
+    const collapseId = `${this.props.title}-collapse`;
     return(
       <div className="col-sm-10 offset-sm-1">
         <div className="card">
