@@ -51,6 +51,13 @@ export default class OrganizationPage extends React.Component{
     this.setState({messages})
   }
 
+  toggleVisible=()=>{
+    this.setState({visible: !this.state.visible});
+  }
+
+  togglePublic=()=>{
+    this.setState({public: !this.state.public});
+  }
 
   render(){
     return(
@@ -104,7 +111,12 @@ export default class OrganizationPage extends React.Component{
           </div>
 
           {this.state.admin && (
-            <GroupSettings groupId={this.state.id}/>
+            <GroupSettings
+            groupId={this.state.id}
+            publicGroup={this.state.public} togglePublic={this.togglePublic}
+            visibleGroup={this.state.visible}
+            toggleVisible={this.toggleVisible}
+            />
           )}
         </div>
       </div>
