@@ -53,6 +53,12 @@ router.post('/:orgId/members', (req,res,next)=>{
   });
 });
 
+router.patch('/:orgId', (req,res,next)=>{
+  queries.updateOrganization(req.params.orgId, req.body).then((updated)=>{
+    res.send(updated);
+  });
+});
+
 router.delete('/:orgId/members', (req,res,next)=>{
   let userId = req.user.id;
   queries.leaveOrganization(req.params.orgId, userId).then((left)=>{

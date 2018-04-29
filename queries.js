@@ -182,6 +182,13 @@ module.exports = {
     .returning('*')
     .then(deleted=>deleted.length?true:false);
   },
+  updateOrganization: (orgId, changes)=>{
+    return knex('organizations')
+    .where('id', orgId)
+    .update(changes)
+    .returning('*')
+    .then(updatedOrganization=>updatedOrganization[0]);
+  },
 
   //admin queries
   toggleAdmin: (userId)=>{
@@ -238,6 +245,54 @@ module.exports = {
   },
 
   //messages queries
+  getMyMessages: (userId)=>{
+    return knex('users_organizations')
+    .where('userId', userId)
+    .select([
+      'messages.id as messageId',
+      'messages.*',
+      'organizations.*',
+      'users.firstName',
+      'users.lastName'
+    ])
+    .join('messages', 'users_organizations.organizationId', 'messages.organizationId')
+    .join('organizations', 'messages.organizationId', 'organizations.id')
+    .join('users', 'messages.adminId', 'users.id')
+    .returning('*')
+    .then((myMessages)=>{
+      return myMessages.map((message)=>{
+        let organization = {};
+        let admin = {};
+        
+        organization.id = message.organizationId;
+        organization.description = message.description;
+        organization.title = message.title;
+        organization.public = message.public;
+        organization.visible = message.visible;
+        delete message.public;
+        delete message.visible;
+        delete message.title;
+        delete message.description;
+        delete message.organizationId;
+        delete message.userId;
+
+        admin.id = message.adminId;
+        admin.firstName = message.firstName;
+        admin.lastName = message.lastName;
+        delete message.adminId;
+        delete message.firstName;
+        delete message.lastName;
+
+        message.id = message.messageId;
+        delete message.messageId;
+
+        message.organization = organization;
+        message.admin = admin;
+        return message;
+      });
+    });
+
+  },
   saveMessage: (message)=>{
     return knex('messages')
     .insert(message)

@@ -95,6 +95,13 @@ router.use('*', (req,res,next)=>{
   }
 });
 
+router.get('/me/messages', (req,res,next)=>{
+  queries.getMyMessages(req.user.id).then((myMessages)=>{
+    res.send(myMessages);
+  });
+});
+
+
 router.patch('/',(req,res,next)=>{
   if(req.body.password){
     queries.getHashword(req.user.email).then((hashword)=>{

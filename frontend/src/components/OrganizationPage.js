@@ -52,13 +52,27 @@ export default class OrganizationPage extends React.Component{
   }
 
   toggleVisible=()=>{
-    this.setState({visible: !this.state.visible});
+    this.updateOrganization({visible: !this.state.visible});
   }
 
   togglePublic=()=>{
-    this.setState({public: !this.state.public});
+    this.updateOrganization({public: !this.state.public});
   }
 
+  updateOrganization=(updates)=>{
+    return fetch(`/api/organizations/${this.state.id}`,{
+      method: 'PATCH',
+      credentials: 'include',
+      body: JSON.stringify(updates),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    .then(res=>res.json())
+    .then((updatedOrganization)=>{
+      this.setState(updatedOrganization);
+    });
+  }
   render(){
     return(
       <div>
