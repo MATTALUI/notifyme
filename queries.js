@@ -251,7 +251,10 @@ module.exports = {
     .select([
       'messages.id as messageId',
       'messages.*',
-      'organizations.*',
+      'organizations.description',
+      'organizations.title',
+      'organizations.public',
+      'organizations.visible',
       'users.firstName',
       'users.lastName'
     ])
@@ -259,11 +262,13 @@ module.exports = {
     .join('organizations', 'messages.organizationId', 'organizations.id')
     .join('users', 'messages.adminId', 'users.id')
     .returning('*')
+    .orderBy('messages.created_at', 'desc')
+    .limit(20)
     .then((myMessages)=>{
       return myMessages.map((message)=>{
         let organization = {};
         let admin = {};
-        
+
         organization.id = message.organizationId;
         organization.description = message.description;
         organization.title = message.title;
