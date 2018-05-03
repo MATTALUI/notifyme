@@ -17,8 +17,8 @@ exports.seed = function(knex, Promise) {
         },
         {
           id: 3,
-          title: 'Cool Kids Club',
-          description: 'This is the place for you if you really like to participate in fun events. We\'re always up to something cool!'
+          title: 'Bat Fan Club',
+          description: 'This is a fan club for all of those people who enjoy the beauty of bats. We celebrate these wonderful creatures in strictly non-vigilante manner...'
         },
         {
           id: 4,

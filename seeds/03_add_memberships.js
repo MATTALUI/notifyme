@@ -19,6 +19,16 @@ exports.seed = function(knex, Promise) {
           id: 3,
           userId: 1,
           organizationId: 4
+        },
+        {
+          id: 4,
+          userId: 1,
+          organizationId: 2
+        },
+        {
+          id: 5,
+          userId: 2,
+          organizationId: 3
         }
       ]);
     })

@@ -304,4 +304,39 @@ module.exports = {
     .returning('*')
     .then(savedMessage=>savedMessage[0]);
   },
+
+  //requests queries
+  getRequests: (userId)=>{
+    return knex('requests')
+    .select([
+      'users.firstName',
+      'users.lastName',
+      'organizations.title',
+      'requests.*'
+    ])
+    .join('users', 'requesterId', 'users.id')
+    .join('organizations', 'organizationId', 'organizations.id')
+    .returning('*')
+    .then((requests)=>{
+      return requests.map((request)=>{
+        let user = {};
+        let organization = {};
+        user.id = request.requesterId;
+        user.firstName = request.firstName;
+        user.lastName = request.lastName;
+        delete request.requesterId;
+        delete request.firstName;
+        delete request.lastName;
+
+        organization.id = request.organizationId;
+        organization.title = request.title;
+        delete request.organizationId;
+        delete request.title;
+
+        request.user = user;
+        request.organization = organization;
+        return request;
+      });
+    });
+  }
 };
