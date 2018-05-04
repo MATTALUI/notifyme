@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ReactModal from 'react-modal';
+import {toast} from 'react-toastify';
 
 
 export default class MyPage extends React.Component{
@@ -95,6 +96,10 @@ export default class MyPage extends React.Component{
       })
       .then(resp=>resp.json())
       .then((update)=>{
+        toast.info('Saved.',{
+          position: toast.POSITION.BOTTOM_LEFT,
+          className: 'bg-info'
+        });
         this.props.updateUser(update);
       });
     }

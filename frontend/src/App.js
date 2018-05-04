@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {ToastContainer, toast} from 'react-toastify';
 import Navbar from './components/Navbar.js';
 import MyPage from './components/MyPage.js';
 import MyMessages from './components/MyMessages.js';
@@ -7,6 +8,7 @@ import OrganizationsPage from './components/OrganizationsPage.js';
 import OrganizationPage from './components/OrganizationPage.js';
 import PasswordChanger from './components/PasswordChanger.js';
 import FourOhFour from './components/FourOhFour.js';
+import 'react-toastify/dist/ReactToastify.css';
 
 class App extends Component {
   constructor(props){
@@ -42,6 +44,7 @@ class App extends Component {
             <Route exact path="/:name/password" render={props=><PasswordChanger user={this.state.user} {...props}/>} />
             <Route render={props => <FourOhFour user={this.state.user} {...props}/>} />
           </Switch>
+          <ToastContainer autoClose={2000}/>
         </div>
       </Router>
     );
