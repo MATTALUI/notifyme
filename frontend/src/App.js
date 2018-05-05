@@ -8,6 +8,7 @@ import OrganizationsPage from './components/OrganizationsPage.js';
 import OrganizationPage from './components/OrganizationPage.js';
 import PasswordChanger from './components/PasswordChanger.js';
 import FourOhFour from './components/FourOhFour.js';
+import './styles/App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 class App extends Component {

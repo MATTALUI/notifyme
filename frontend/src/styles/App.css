@@ -1,0 +1,12 @@
+.request-notification{
+  background-color: red;
+  position: absolute;
+  top: 0.5em;
+  left: 3em;
+  text-align: center;
+  border-radius: 100%;
+  font-size: .5em;
+  height: 1.4em;
+  width: 1.4em;
+  color: white;
+}

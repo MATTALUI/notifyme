@@ -9,6 +9,23 @@ export default class Navbar extends React.Component{
     };
   }
 
+  // componentWillMount = ()=>{
+  //   if(this.props.user.admin){
+  //     console.log('you\'re an admin');
+  //   }
+  // }
+  componentWillReceiveProps=(newProps)=>{
+    if(!newProps.user.admin){
+      return;
+    }
+    return fetch('/api/requests',{credentials: 'include'})
+    .then(res=>res.json())
+    .then((requests)=>{
+      console.log(requests);
+      this.setState({requests});
+    });
+  }
+
   logout=(event)=>{
     event.preventDefault();
     fetch('/api/users/logout', {credentials: 'include', method: 'DELETE'})
@@ -36,14 +53,29 @@ export default class Navbar extends React.Component{
             <li className="nav-item dropdown">
               <a id="navbar-action" className="nav-link"  data-toggle="dropdown">
                 <i className="fa fa-gavel" style={{fontWeight: '2em'}}></i>
+                {this.state.requests.length && (
+                  <span className="request-notification">{this.state.requests.length}</span>
+                )}
               </a>
-              {(this.state.requests.length === 0) && (<div className="dropdown-menu dropdown-menu-right">
-                <div className="dropdown-item">No Requests</div>
-              </div>)}
-              {this.state.requests.map(request=>(
+              {(this.state.requests.length === 0) ? (
                 <div className="dropdown-menu dropdown-menu-right">
-                </div>
-              ))}
+                  <div className="dropdown-item">No Requests</div>
+                </div>)
+                :
+                (
+                  <div className="dropdown-menu dropdown-menu-right">
+                  {this.state.requests.map(request=>(
+                    <div className="dropdown-item">
+                      <p><b>{`${request.user.firstName} ${request.user.lastName} wants to join ${request.organization.title}.`}</b></p>
+                      <div className="row">
+                        <button className="btn btn-info col-xs-6 pull-right">Accept</button>
+                        <button className="btn btn-info col-xs-6 pull-right">Decline</button>
+                      </div>
+                    </div>
+                  ))}
+                  </div>
+                )
+              }
 
             </li>
           )}
