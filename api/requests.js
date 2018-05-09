@@ -8,4 +8,15 @@ router.get('/',(req,res,next)=>{
   });
 });
 
+router.post('/',(req,res,next)=>{
+  //accept Requests
+  res.send('requests accepted');
+});
+
+router.delete('/',(req,res,next)=>{
+  queries.declineRequest(req.body.organizationId, req.body.requesterId).then((declinedRequest)=>{
+    res.send(declinedRequest);
+  });
+});
+
 module.exports = router;

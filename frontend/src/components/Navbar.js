@@ -21,7 +21,6 @@ export default class Navbar extends React.Component{
     return fetch('/api/requests',{credentials: 'include'})
     .then(res=>res.json())
     .then((requests)=>{
-      console.log(requests);
       this.setState({requests});
     });
   }
@@ -30,6 +29,26 @@ export default class Navbar extends React.Component{
     event.preventDefault();
     fetch('/api/users/logout', {credentials: 'include', method: 'DELETE'})
     .then(()=>{ window.location = "/"; })
+  }
+
+  acceptRequest =(request)=>{
+    console.log('accept');
+  }
+
+  declineRequest = (request)=>{
+    return fetch(`/api/requests`,{
+      method: 'DELETE',
+      credentials: 'include',
+      body:JSON.stringify({
+        organizationId: request.organization.id,
+        requesterId: request.user.id
+      }),
+      headers: {'Content-type' : 'application/json'}
+    })
+    .then(res=>res.json())
+    .then((deleted)=>{
+      this.setState({requests: this.state.requests.filter(req=>req.id!==request.id)});
+    });
   }
 
   render(){
@@ -53,7 +72,7 @@ export default class Navbar extends React.Component{
             <li className="nav-item dropdown">
               <a id="navbar-action" className="nav-link"  data-toggle="dropdown">
                 <i className="fa fa-gavel" style={{fontWeight: '2em'}}></i>
-                {this.state.requests.length && (
+                {this.state.requests.length > 0 && (
                   <span className="request-notification">{this.state.requests.length}</span>
                 )}
               </a>
@@ -66,11 +85,14 @@ export default class Navbar extends React.Component{
                   <div className="dropdown-menu dropdown-menu-right">
                   {this.state.requests.map(request=>(
                     <div className="dropdown-item">
-                      <p><b>{`${request.user.firstName} ${request.user.lastName} wants to join ${request.organization.title}.`}</b></p>
-                      <div className="row">
-                        <button className="btn btn-info col-xs-6 pull-right">Accept</button>
-                        <button className="btn btn-info col-xs-6 pull-right">Decline</button>
+                      <p>
+                        <b>{`${request.user.firstName} ${request.user.lastName} wants to join ${request.organization.title}.`}</b>
+                      </p>
+                      <div className="request-controls">
+                        <button className="btn btn-sm btn-info pull-right" onClick={()=>{this.acceptRequest(request)}}>Accept</button>
+                        <button className="btn btn-sm btn-info pull-right" onClick={()=>{this.declineRequest(request)}}>Decline</button>
                       </div>
+
                     </div>
                   ))}
                   </div>

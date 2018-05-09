@@ -338,5 +338,13 @@ module.exports = {
         return request;
       });
     });
+  },
+  declineRequest:(orgId,userId)=>{
+    return knex('requests')
+    .del()
+    .where('organizationId', orgId)
+    .where('requesterId', userId)
+    .returning('*')
+    .then(deleted=>deleted);
   }
 };

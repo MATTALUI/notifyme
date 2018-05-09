@@ -10,3 +10,8 @@
   width: 1.4em;
   color: white;
 }
+
+.request-controls{
+  display: flex;
+  justify-content: space-around;
+}
