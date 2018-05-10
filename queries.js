@@ -339,6 +339,15 @@ module.exports = {
       });
     });
   },
+  makeRequest: (orgId, userId)=>{
+    return knex('requests')
+    .insert({
+      organizationId: orgId,
+      requesterId: userId
+    })
+    .returning('*')
+    .then(request=>request)
+  },
   declineRequest:(orgId,userId)=>{
     return knex('requests')
     .del()

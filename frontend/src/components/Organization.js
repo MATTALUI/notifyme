@@ -14,7 +14,15 @@ export default class Organization extends React.Component{
 
   sendJoinRequest = ()=>{
     let id = this.props.id;
-    console.log('send a join request', id);
+    fetch('/api/requests',{
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({organizationId: id}),
+      headers: {'Content-type': 'application/json'}
+    })
+    .then(res=>res.json())
+    .then((request)=>{
+    });
   };
 
   joinOrLeaveOrganization = (joinOrLeave, orgId)=>{

@@ -9,8 +9,17 @@ router.get('/',(req,res,next)=>{
 });
 
 router.post('/',(req,res,next)=>{
+  //make new requests
+  queries.declineRequest(req.body.organizationId, req.user.id).then(()=>{
+    queries.makeRequest(req.body.organizationId, req.user.id).then((request)=>{
+      res.send(request);
+    });
+  });
+});
+
+router.patch('/',(req,res,next)=>{
   //accept Requests
-  res.send('requests accepted');
+  res.send({success: 'requests accepted'});
 });
 
 router.delete('/',(req,res,next)=>{
