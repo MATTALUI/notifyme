@@ -22,6 +22,7 @@ export default class Organization extends React.Component{
     })
     .then(res=>res.json())
     .then((request)=>{
+      this.props.updateOrganization({id, requestSent: true });
     });
   };
 
@@ -49,6 +50,7 @@ export default class Organization extends React.Component{
     const publicOrg = this.props.public;
     const member = this.props.member;
     const admin = this.props.admin;
+    const requestSent = this.props.requestSent
     return (
       <tr className={admin ? "table-warning" : null}>
         <td >{title}</td>
@@ -58,6 +60,8 @@ export default class Organization extends React.Component{
             <button className="btn btn-secondary col-sm-12" onClick={this.leaveOrganization}>Leave</button>
           ):publicOrg?(
             <button className="btn btn-secondary col-sm-12" onClick={this.joinOrganization}>Join</button>
+          ):requestSent?(
+            <button className="btn btn-secondary -col-sm-12" disabled>Request Sent</button>
           ):(
             <button className="btn btn-secondary col-sm-12" onClick={this.sendJoinRequest}>Request</button>
           )}

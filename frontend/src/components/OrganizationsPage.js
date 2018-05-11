@@ -76,7 +76,9 @@ export default class OrganizationsPage extends React.Component{
               {this.state.pub.length > 0 && (
                 <thead className="thead-light">
                   <tr>
-                    <th colspan="4">PUBLIC ORGANIZATIONS</th>
+                    <th colspan="2">PUBLIC ORGANIZATIONS</th>
+                    <th><button className="btn btn-large btn-default col-sm-12" style={{visibility: 'hidden'}} disabled>RequestSent</button></th>
+                    <th></th>
                   </tr>
                 </thead>
               )}

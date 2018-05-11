@@ -10,8 +10,8 @@ router.get('/',(req,res,next)=>{
 
 router.post('/',(req,res,next)=>{
   //make new requests
-  queries.declineRequest(req.body.organizationId, req.user.id).then(()=>{
-    queries.makeRequest(req.body.organizationId, req.user.id).then((request)=>{
+  queries.deleteRequest(req.body.organizationId, req.user.id).then(()=>{
+    queries.createRequest(req.body.organizationId, req.user.id).then((request)=>{
       res.send(request);
     });
   });
@@ -23,7 +23,7 @@ router.patch('/',(req,res,next)=>{
 });
 
 router.delete('/',(req,res,next)=>{
-  queries.declineRequest(req.body.organizationId, req.body.requesterId).then((declinedRequest)=>{
+  queries.deleteRequest(req.body.organizationId, req.body.requesterId).then((declinedRequest)=>{
     res.send(declinedRequest);
   });
 });

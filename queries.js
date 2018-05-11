@@ -63,9 +63,22 @@ module.exports = {
             promises.push(module.exports.checkIfOrganizationAdmin(org.id, userId));
           });
           return Promise.all(promises).then((adminships)=>{
-            return orgs.map((org,index)=>{
+            promises = [];
+            orgs.forEach((org,index)=>{
               org.admin = adminships[index];
-              return org;
+              if(!org.public){
+                promises.push(module.exports.checkRequest(org.id, userId));
+              }
+            });
+            return Promise.all(promises).then((requestsSent)=>{
+              requestIndex = 0;
+              orgs.forEach((org, index)=>{
+                if(!org.public){
+                  org.requestSent = requestsSent[requestIndex];
+                  requestIndex++;
+                }
+              });
+              return orgs;
             });
           });
         });
@@ -339,7 +352,13 @@ module.exports = {
       });
     });
   },
-  makeRequest: (orgId, userId)=>{
+  checkRequest: (orgId, userId)=>{
+    return knex('requests')
+    .where('organizationId', orgId)
+    .where('requesterId', userId)
+    .then(requests=>requests.length > 0);
+  },
+  createRequest: (orgId, userId)=>{
     return knex('requests')
     .insert({
       organizationId: orgId,
@@ -348,7 +367,7 @@ module.exports = {
     .returning('*')
     .then(request=>request)
   },
-  declineRequest:(orgId,userId)=>{
+  deleteRequest:(orgId,userId)=>{
     return knex('requests')
     .del()
     .where('organizationId', orgId)
