@@ -9,11 +9,6 @@ export default class Navbar extends React.Component{
     };
   }
 
-  // componentWillMount = ()=>{
-  //   if(this.props.user.admin){
-  //     console.log('you\'re an admin');
-  //   }
-  // }
   componentWillReceiveProps=(newProps)=>{
     if(!newProps.user.admin){
       return;
@@ -32,7 +27,21 @@ export default class Navbar extends React.Component{
   }
 
   acceptRequest =(request)=>{
-    console.log('accept');
+    return fetch('/api/requests',{
+      method: 'PATCH',
+      credentials: 'include',
+      body: JSON.stringify({
+        organizationId: request.organization.id,
+        requesterId: request.user.id
+      }),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    .then(res=>res.json())
+    .then((acceptance)=>{
+      this.setState({requests: this.state.requests.filter(req=>req.id!==request.id)});
+    });
   }
 
   declineRequest = (request)=>{
