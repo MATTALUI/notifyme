@@ -8,9 +8,6 @@ export default class MyMessages extends React.Component{
     };
   }
 
-  // componentWillReceiveProps = (props)=>{
-  //   console.log(props);
-  // }
 
   componentWillMount(){
     return fetch(`/api/users/me/messages`,{

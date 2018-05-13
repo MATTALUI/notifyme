@@ -1,3 +1,8 @@
+html{
+  width: 100%;
+  margin: 0;
+}
+
 .request-notification{
   background-color: red;
   position: absolute;
