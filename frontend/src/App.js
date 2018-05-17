@@ -7,6 +7,7 @@ import MyMessages from './components/MyMessages.js';
 import OrganizationsPage from './components/OrganizationsPage.js';
 import OrganizationPage from './components/OrganizationPage.js';
 import PasswordChanger from './components/PasswordChanger.js';
+import PostMessage from './components/PostMessage.js';
 import FourOhFour from './components/FourOhFour.js';
 import './styles/App.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -40,6 +41,7 @@ class App extends Component {
             <Route exact path="/" render={props=><MyPage user={this.state.user} updateUser={this.updateUser} {...props}/>} />
             <Route exact path="/organizations" render={props=><OrganizationsPage user={this.state.user} {...props}/>} />
             <Route exact path="/organizations/:orgId" render={props=><OrganizationPage user={this.state.user} {...props}/>} />
+            <Route exact path="/messages/new" render={props=><PostMessage user={this.state.user} {...props}/>} />
             <Route exact path="/:name/organizations" render={props=><OrganizationsPage user={this.state.user} {...props} myOrganizations={true}/>} />
             <Route exact path="/:name/messages" render={props=><MyMessages user={this.state.user}  {...props}/>} />
             <Route exact path="/:name/password" render={props=><PasswordChanger user={this.state.user} {...props}/>} />

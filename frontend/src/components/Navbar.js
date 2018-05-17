@@ -127,7 +127,7 @@ export default class Navbar extends React.Component{
 
               <Link className="dropdown-item" to={user.firstName ? `/${user.firstName.toLowerCase()}/organizations`:""}>My Organizations</Link>
 
-              {user.admin && (
+              {false && user.admin && (
                 <Link className="dropdown-item" to={user.firstName ? `/${user.firstName.toLowerCase()}/organizations/manage`:""}>Manage Organizations</Link>
               )}
 
