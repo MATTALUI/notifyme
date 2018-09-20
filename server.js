@@ -36,12 +36,11 @@ app.use(cookieParser());
 
 app.use(express.static('public'));
 
-
-app.use('/api/users', usersRoute);
 app.use('/api/texthooks', (req,res,next)=>{
   console.log(req.body);
   res.sendStatus(200);
 });
+app.use('/api/users', usersRoute);
 
 
 
